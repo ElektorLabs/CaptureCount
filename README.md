@@ -34,6 +34,6 @@
 - A text log of total counts is also maintained in `total_counts_log.txt`.
 
 ## Acknowledgements
-Credits to Joseph Redmon @pjreddie for developing the YOLO: Real-Time Object Detection model, which was crucial in the creation of this project.
+Credits to Joseph Redmon [@pjreddie](https://github.com/pjreddie) for developing the YOLO: Real-Time Object Detection model, which was crucial in the creation of this project.
 
 
