@@ -1,7 +1,6 @@
-#Updated V4+1
-# This one is better than the  V3 as this one compares the lastest image and the last image taken by the raspberry pi - 
-# However if the same person moves in the frame he is gets detected multiple times as well
-# At the end of the code we get a print out of all the sum of objects collected per category.
+# This code is working, the addtion to it from V4.1 - is that it takes a picture of the detected object in a cropped form 
+# Improvment Required, it needs to save the entire frame not the cutout of the object from the entire picture.
+
 import cv2
 import pandas as pd
 import numpy as np
@@ -44,8 +43,15 @@ data_frame = pd.DataFrame(columns=['Timestamp', 'Type', 'Count'])
 object_counts = {cls: 0 for cls in classes}  # Object count per category
 centroid_tracking = {}  # Tracks centroids of detected objects
 
+# Ensure output directory exists
+output_dir = "output"
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 # Main loop
 image_path = "temp.jpg"
+object_id = 0  # Unique identifier for each object
+
 try:
     while True:
         capture_image(image_path)
@@ -92,6 +98,14 @@ try:
         for i in indices:
             box = boxes[i]
             x, y, w, h = box
+            x, y, w, h = int(x), int(y), int(w), int(h)  # Ensure the values are integers
+
+            # Ensure coordinates are within the frame
+            x = max(0, x)
+            y = max(0, y)
+            w = min(Width - x, w)
+            h = min(Height - y, h)
+
             centroid = centroids[i]
             class_id = class_ids[i]
 
@@ -99,7 +113,17 @@ try:
             if class_id not in centroid_tracking or not any(np.linalg.norm(np.array(centroid) - np.array(old_centroid)) < 50 for old_centroid in centroid_tracking[class_id]):
                 object_counts[classes[class_id]] += 1
                 centroid_tracking.setdefault(class_id, []).append(centroid)
-                data_frame = data_frame.append({'Timestamp': datetime.now(), 'Type': classes[class_id], 'Count': 1}, ignore_index=True)
+                
+                # Update data_frame using pandas.concat
+                new_row = pd.DataFrame([{'Timestamp': datetime.now(), 'Type': classes[class_id], 'Count': 1}])
+                data_frame = pd.concat([data_frame, new_row], ignore_index=True)
+
+                # Extract and save the image of detected object
+                object_roi = frame[y:y+h, x:x+w]
+                if object_roi.size > 0:  # Check if ROI is not empty
+                    object_filename = os.path.join(output_dir, f"object_{object_id}_{classes[class_id]}.jpg")
+                    cv2.imwrite(object_filename, object_roi)
+                    object_id += 1
 
             draw_bounding_box(frame, class_id, confidences[i], round(x), round(y), round(x+w), round(y+h))
 
