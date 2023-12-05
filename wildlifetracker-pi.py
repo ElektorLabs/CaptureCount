@@ -1,5 +1,4 @@
-# This code is working, the addtion to it from V4.1 - is that it takes a picture of the detected object in a cropped form 
-# Improvment Required, it needs to save the entire frame not the cutout of the object from the entire picture.
+# V6 - Working like V5 but, it saves the complete frame when an object is detected instead of saving the cropped image of the detected object.
 
 import cv2
 import pandas as pd
@@ -100,12 +99,6 @@ try:
             x, y, w, h = box
             x, y, w, h = int(x), int(y), int(w), int(h)  # Ensure the values are integers
 
-            # Ensure coordinates are within the frame
-            x = max(0, x)
-            y = max(0, y)
-            w = min(Width - x, w)
-            h = min(Height - y, h)
-
             centroid = centroids[i]
             class_id = class_ids[i]
 
@@ -118,12 +111,10 @@ try:
                 new_row = pd.DataFrame([{'Timestamp': datetime.now(), 'Type': classes[class_id], 'Count': 1}])
                 data_frame = pd.concat([data_frame, new_row], ignore_index=True)
 
-                # Extract and save the image of detected object
-                object_roi = frame[y:y+h, x:x+w]
-                if object_roi.size > 0:  # Check if ROI is not empty
-                    object_filename = os.path.join(output_dir, f"object_{object_id}_{classes[class_id]}.jpg")
-                    cv2.imwrite(object_filename, object_roi)
-                    object_id += 1
+                # Save the entire frame when an object is detected
+                frame_filename = os.path.join(output_dir, f"frame_{object_id}_{classes[class_id]}.jpg")
+                cv2.imwrite(frame_filename, frame)
+                object_id += 1
 
             draw_bounding_box(frame, class_id, confidences[i], round(x), round(y), round(x+w), round(y+h))
 
