@@ -1,7 +1,7 @@
 # Wildlife Tracker on Raspberry Pi
 
 ## Note
-- There is an alternative script named `wildlifetracker.py` in the repository, designed to work on Ubuntu 22.4 on Raspberry Pi 5.
+- There is an alternative script named `wildlifetracker.py` in the repository, designed to work on Ubuntu 23.10 on Raspberry Pi 5.
 - Despite the name, the script is capable of detecting a wide range of objects as specified in the YOLO `coco.names` file.
 
 ## Overview
