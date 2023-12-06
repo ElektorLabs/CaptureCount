@@ -1,11 +1,11 @@
-# Wildlife Tracker on Raspberry Pi
+# CaptureCount - Object Detector on Raspberry Pi
 
 ## Note
-- There is an alternative script named `wildlifetracker.py` in the repository, designed to work on Ubuntu 23.10 on Raspberry Pi 5.
+- There is an alternative script named `capturecount.py` in the repository, designed to work on Ubuntu 23.10 on Raspberry Pi 5.
 - Despite the name, the script is capable of detecting a wide range of objects as specified in the YOLO `coco.names` file.
 
 ## Overview
-`wildlifetracker-pi.py` is a Python script designed for real-time object detection on Raspberry Pi 5, using the YOLO (You Only Look Once) model developed by Joseph Redmon. This powerful tool can identify and track various objects as defined in the `coco.names` file from the YOLO model. It's optimized for Pi OS on Raspberry Pi 5.
+`capturecount-pi.py` is a Python script designed for real-time object detection on Raspberry Pi 5, using the YOLO (You Only Look Once) model developed by Joseph Redmon. This powerful tool can identify and track various objects as defined in the `coco.names` file from the YOLO model. It's optimized for Pi OS on Raspberry Pi 5.
 
 ## Features
 - Real-time object detection using YOLOv3.
@@ -23,10 +23,10 @@
 1. Clone the repository to your Raspberry Pi.
 2. Ensure Python and the required libraries are installed.
 3. Download YOLOv3 model files and `coco.names`, and place them in the `./yolo` directory within the script's folder.
-4. Run `wildlifetracker-pi.py`.
+4. Run `capturecount-pi.py`.
 
 ## Usage
-- Execute the script: `python wildlifetracker-pi.py`
+- Execute the script: `python capturecount-pi.py`
 - The script continuously captures images and performs object detection.
 - Detected objects are framed with bounding boxes in real-time display.
 - Full-frame images are saved in the `output` folder when an object is detected.
